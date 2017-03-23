@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitGifter.API", "BitGifter.API\BitGifter.API.csproj", "{7621C5ED-AD3B-43D0-BE1C-BBB667F4B51B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitGifter.Core", "BitGifter.Core\BitGifter.Core.csproj", "{AF4783EA-3DE5-4C5B-821B-749C2D404BCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitGifter.Core.Tests", "BitGifter.Core.Tests\BitGifter.Core.Tests.csproj", "{4C282159-D333-4729-938B-9B9A896576BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7621C5ED-AD3B-43D0-BE1C-BBB667F4B51B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7621C5ED-AD3B-43D0-BE1C-BBB667F4B51B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7621C5ED-AD3B-43D0-BE1C-BBB667F4B51B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7621C5ED-AD3B-43D0-BE1C-BBB667F4B51B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF4783EA-3DE5-4C5B-821B-749C2D404BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF4783EA-3DE5-4C5B-821B-749C2D404BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF4783EA-3DE5-4C5B-821B-749C2D404BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF4783EA-3DE5-4C5B-821B-749C2D404BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C282159-D333-4729-938B-9B9A896576BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C282159-D333-4729-938B-9B9A896576BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C282159-D333-4729-938B-9B9A896576BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C282159-D333-4729-938B-9B9A896576BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
