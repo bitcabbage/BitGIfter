@@ -8,6 +8,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitGifter.Core", "BitGifter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitGifter.Core.Tests", "BitGifter.Core.Tests\BitGifter.Core.Tests.csproj", "{4C282159-D333-4729-938B-9B9A896576BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53770B73-D481-4495-A052-183217E85AC9}"
+	ProjectSection(SolutionItems) = preProject
+		.envrc = .envrc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

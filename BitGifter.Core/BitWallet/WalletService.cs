@@ -1,7 +1,6 @@
 ﻿using BitGifter.Core.BitWallet.Messages;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +9,14 @@ namespace BitGifter.Core.BitWallet
 {
     public class WalletService
     {
+        protected string BitWalletAddress => Environment.GetEnvironmentVariable("BIT_WALLET_ADDRESS");
+        protected string BitWalletAuthHeader => Environment.GetEnvironmentVariable("BIT_WALLET_AUTH_HEADER");
+
         public WalletResponse CreateWallet(WalletRequest request)
         {
             var response = new HttpClientWrapper()
-             .SetAuthHeader("IiHbKeXKLE2vfmQvTHO2Q5Yw63Lj2Qn65eQeYXXc")
-             .SetBaseAddress("https://quxze3zsll.execute-api.us-west-2.amazonaws.com/latest")
+             .SetAuthHeader(BitWalletAuthHeader)
+             .SetBaseAddress(BitWalletAddress)
              .SetResource("/wallets")
              .AddParameter(request)
              .PostAsJsonAsync().Result;
@@ -34,11 +36,11 @@ namespace BitGifter.Core.BitWallet
         public PaymentResponse MakePayment(PaymentRequest request)
         {
             var response = new HttpClientWrapper()
-          .SetAuthHeader("IiHbKeXKLE2vfmQvTHO2Q5Yw63Lj2Qn65eQeYXXc")
-          .SetBaseAddress("https://quxze3zsll.execute-api.us-west-2.amazonaws.com/latest")
-          .SetResource("/payments")
-          .AddParameter(request)
-          .PostAsJsonAsync().Result;
+             .SetAuthHeader(BitWalletAuthHeader)
+             .SetBaseAddress(BitWalletAddress)
+             .SetResource("/payments")
+             .AddParameter(request)
+             .PostAsJsonAsync().Result;
 
             //if (!response.IsSuccessStatusCode)
             //{
