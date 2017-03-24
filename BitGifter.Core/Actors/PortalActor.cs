@@ -54,7 +54,7 @@ namespace BitGifter.Core.Actors
 
         void BuyGiftCardHandler(BuyGiftCardRequest request)
         {
-            _log.Info($"Handling request. Id: {request.Id}. Price: {request.GiftCard.Price}. Description: {request.GiftCard.Description}");
+            _log.Info($"0. Handling request. Id: {request.Id}. Price: {request.GiftCard.Price}. Description: {request.GiftCard.Description}");
 
             if (!_portal.IsAuthenticated)
             {
@@ -66,6 +66,7 @@ namespace BitGifter.Core.Actors
             }
             else
             {
+                _log.Warning("1. Launching portal API");
                 var cardCode = _portal
                       .GoToGiftCards()
                       .ChooseCard(request)
@@ -73,16 +74,16 @@ namespace BitGifter.Core.Actors
                       .Checkout()
                       .PayWithBitcoin(invoice =>
                       {
-                          _log.Info($"payment callback. wallet: {invoice.BitcoinAddress}, btc : {invoice.BtcPrice}, fiat: {invoice.FiatPrice} ");
+                          _log.Info($"2. payment callback. wallet: {invoice.BitcoinAddress}, btc : {invoice.BtcPrice}, fiat: {invoice.FiatPrice} ");
 
-                          var walletService = new WalletService();
+                          var walletService = new FakeWalletService();
 
                           var waletResponse = walletService.CreateWallet(new WalletRequest { customer = new WalletRequest.Customer { id = request.Customer.Id } });
                           var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new PaymentRequest.Customer { id = request.Customer.Id }, transfer = new PaymentRequest.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });                       
                       })
                       .GetCardCode();
 
-                _log.Info($"BuyCardHandler finished. Card code: {cardCode}");
+                _log.Info($"3. BuyCardHandler finished. Card code: {cardCode}");
             }
             _log.Info($"BuyCardHandler finished.");
         }
@@ -117,7 +118,7 @@ namespace BitGifter.Core.Actors
 
         private void Authenticated()
         {
-            _log.Info("Become Authenticated");
+            _log.Info("State Machine: Become Authenticated");
 
             if (null != Stash)
             {
@@ -130,7 +131,7 @@ namespace BitGifter.Core.Actors
 
         private void UnAuthenticated()
         {
-            _log.Info("Become Unauthenticated");
+            _log.Info("State Machine: Become Unauthenticated");
             Stash.Stash();
             Receive<BuyGiftCardRequest>(x => Stash.Stash());
             Receive<NewAuthCookie>(x => HandleNewAuthCookie(x));

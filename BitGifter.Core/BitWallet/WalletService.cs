@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BitGifter.Core.BitWallet
 {
-    public class WalletService
+    public class WalletService : IWalletService
     {
         protected string BitWalletAddress => Environment.GetEnvironmentVariable("BIT_WALLET_ADDRESS");
         protected string BitWalletAuthHeader => Environment.GetEnvironmentVariable("BIT_WALLET_AUTH_HEADER");
