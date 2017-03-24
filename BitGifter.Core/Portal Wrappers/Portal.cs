@@ -2,6 +2,7 @@ using System.Threading;
 using OpenQA.Selenium;
 using System;
 using static BitGifter.Core.Actors.PortalActor;
+using BitGifter.Core.Cross_Cutting;
 
 namespace BitGifter.Core.Portal_Wrappers
 {
@@ -10,6 +11,7 @@ namespace BitGifter.Core.Portal_Wrappers
         public string BitcoinAddress { get; set; }
         public decimal BtcPrice { get; set; }
         public decimal FiatPrice { get; set; }
+        public decimal SatoshiPrice => BtcPrice.BtcToSatoshi();
     }
 
    

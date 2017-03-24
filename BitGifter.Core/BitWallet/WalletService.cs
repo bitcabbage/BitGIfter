@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BitGifter.Core.BitWallet.Messages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -7,44 +8,6 @@ using System.Threading.Tasks;
 
 namespace BitGifter.Core.BitWallet
 {
-    public class WalletRequest
-    {
-        public Customer customer { get; set; }
-    }
-
-    public class Customer
-    {
-        public string id { get; set; }
-    }
-
-
-    public class WalletResponse
-    {
-        public Wallet wallet { get; set; }
-    }
-
-    public class Wallet
-    {
-        public string address { get; set; }
-    }
-
-    public class Transfer
-    {
-        public string to { get; set; }
-        public decimal amount { get; set; }
-    }
-
-    public class PaymentRequest
-    {
-        public Customer customer { get; set; }
-        public Transfer transfer { get; set; }
-    }
-
-    public class PaymentResponse
-    {
-
-    }
-
     public class WalletService
     {
         public WalletResponse CreateWallet(WalletRequest request)

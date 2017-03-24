@@ -1,5 +1,6 @@
 using Akka.Actor;
 using Akka.Event;
+using BitWallet = BitGifter.Core.BitWallet;
 using BitGifter.Core.Customers;
 using BitGifter.Core.Gift_Cards;
 using BitGifter.Core.Portal_Wrappers;
@@ -72,7 +73,10 @@ namespace BitGifter.Core.Actors
                       {
                           _log.Info($"payment callback. wallet: {invoice.BitcoinAddress}, btc : {invoice.BtcPrice}, fiat: {invoice.FiatPrice} ");
 
-                          //call services
+                          var walletService = new BitWallet.WalletService();
+
+                          var waletResponse = walletService.CreateWallet(new BitWallet.WalletRequest { customer = new BitWallet.Customer { id = request.Customer.Id } });
+                          var paymentResult = walletService.MakePayment(new BitWallet.PaymentRequest { customer = new BitWallet.Customer { id = request.Customer.Id }, transfer = new BitWallet.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });                       
                       })
                       .GetCardCode();
 
