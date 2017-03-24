@@ -1,6 +1,7 @@
 using Akka.Actor;
 using Akka.Event;
-using BitWallet = BitGifter.Core.BitWallet;
+using BitGifter.Core.BitWallet;
+using BitGifter.Core.BitWallet.Messages;
 using BitGifter.Core.Customers;
 using BitGifter.Core.Gift_Cards;
 using BitGifter.Core.Portal_Wrappers;
@@ -10,6 +11,7 @@ using OpenQA.Selenium.Firefox;
 using System;
 using System.IO;
 using static BitGifter.Core.Actors.TelegramActor;
+
 
 namespace BitGifter.Core.Actors
 {
@@ -73,10 +75,10 @@ namespace BitGifter.Core.Actors
                       {
                           _log.Info($"payment callback. wallet: {invoice.BitcoinAddress}, btc : {invoice.BtcPrice}, fiat: {invoice.FiatPrice} ");
 
-                          var walletService = new BitWallet.WalletService();
+                          var walletService = new WalletService();
 
-                          var waletResponse = walletService.CreateWallet(new BitWallet.WalletRequest { customer = new BitWallet.Customer { id = request.Customer.Id } });
-                          var paymentResult = walletService.MakePayment(new BitWallet.PaymentRequest { customer = new BitWallet.Customer { id = request.Customer.Id }, transfer = new BitWallet.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });                       
+                          var waletResponse = walletService.CreateWallet(new WalletRequest { customer = new WalletRequest.Customer { id = request.Customer.Id } });
+                          var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new PaymentRequest.Customer { id = request.Customer.Id }, transfer = new PaymentRequest.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });                       
                       })
                       .GetCardCode();
 

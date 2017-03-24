@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using BitGifter.Core.Cross_Cutting;
 using BitGifter.Core.BitWallet;
+using BitGifter.Core.BitWallet.Messages;
 
 namespace BitGifter.Core.Tests
 {
@@ -14,8 +15,8 @@ namespace BitGifter.Core.Tests
 
             var walletService = new WalletService();
 
-            var waletResponse = walletService.CreateWallet(new WalletRequest { customer = new BitWallet.Customer { id = "artur_test" } });
-            var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new BitWallet.Customer { id = "artur_test" }, transfer = new Transfer { amount = amount_to_send, to = "1CErEKqgtJ3wmQaF2Kt9YnNVKuBofGWjv4" } });
+            var waletResponse = walletService.CreateWallet(new WalletRequest { customer = new WalletRequest.Customer { id = "artur_test" } });
+            var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new PaymentRequest.Customer { id = "artur_test" }, transfer = new PaymentRequest.Transfer { amount = amount_to_send, to = "1CErEKqgtJ3wmQaF2Kt9YnNVKuBofGWjv4" } });
         }
     }
 }
