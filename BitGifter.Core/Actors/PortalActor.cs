@@ -35,72 +35,27 @@ namespace BitGifter.Core.Actors
         };
 
         private IWebDriver driver;
-        private readonly ILoggingAdapter _log = Logging.GetLogger(Context);      
+        private readonly ILoggingAdapter _log = Logging.GetLogger(Context);
         private IActorRef _telegramActor;
 
         #endregion
 
-        protected override void PreStart()
-        {
-            Setup();           
-            base.PreStart();
-        }
+        #region Handlers
 
-        protected override void PostStop()
-        {
-            driver.Dispose();
-            base.PostStop();
-        }
-
-        protected override void PreRestart(Exception reason, object message)
-        {
-            if (null != message)
-            {
-                Setup();               
-            }
-        }
-       
-        public PortalActor(IActorRef telegramActor)
-        {
-            _telegramActor = telegramActor;
-            Authenticated();
-        }
-
-        private void Authenticated()
-        {
-            _log.Info("Become Authenticated");
-
-            if (null != Stash)
-            {
-                Stash.UnstashAll();
-            }
-
-            Receive<BuyGiftCardRequest>(x => BuyCardHandler(x));
-            Receive<NewAuthCookie>(x => HandleNewAuthCookie(x));
-        }
-
-        private void UnAuthenticated()
-        {
-            _log.Info("Become Unauthenticated");
-            Stash.Stash();
-            Receive<BuyGiftCardRequest>(x => Stash.Stash());
-            Receive<NewAuthCookie>(x => HandleNewAuthCookie(x));
-        }
-
-        private void HandleNewAuthCookie(NewAuthCookie x)
+        void HandleNewAuthCookie(NewAuthCookie x)
         {
             _authCookie.Value = x.Value;
-            _portal.SetAuthCookie(_authCookie.Value);          
+            _portal.SetAuthCookie(x.Value);
             Become(Authenticated);
         }
 
-        void BuyCardHandler(BuyGiftCardRequest request)
+        void BuyGiftCardHandler(BuyGiftCardRequest request)
         {
             _log.Info($"Handling request. Id: {request.Id}. Price: {request.GiftCard.Price}. Description: {request.GiftCard.Description}");
 
             if (!_portal.IsAuthenticated)
             {
-                _log.Warn("Auth required");
+                _log.Warning("Auth required");
 
                 _telegramActor.Tell(new RequestCookie());
 
@@ -117,13 +72,62 @@ namespace BitGifter.Core.Actors
                       {
                           _log.Info($"payment callback. wallet: {invoice.BitcoinAddress}, btc : {invoice.BtcPrice}, fiat: {invoice.FiatPrice} ");
 
-                      //call services
-                  })
+                          //call services
+                      })
                       .GetCardCode();
 
                 _log.Info($"BuyCardHandler finished. Card code: {cardCode}");
             }
             _log.Info($"BuyCardHandler finished.");
+        }
+
+        #endregion
+
+        protected override void PreStart()
+        {
+            Setup();
+            base.PreStart();
+        }
+
+        protected override void PostStop()
+        {
+            driver.Dispose();
+            base.PostStop();
+        }
+
+        protected override void PreRestart(Exception reason, object message)
+        {
+            if (null != message)
+            {
+                Setup();
+            }
+        }
+
+        public PortalActor(IActorRef telegramActor)
+        {
+            _telegramActor = telegramActor;
+            Authenticated();
+        }
+
+        private void Authenticated()
+        {
+            _log.Info("Become Authenticated");
+
+            if (null != Stash)
+            {
+                Stash.UnstashAll();
+            }
+
+            Receive<BuyGiftCardRequest>(x => BuyGiftCardHandler(x));
+            Receive<NewAuthCookie>(x => HandleNewAuthCookie(x));
+        }
+
+        private void UnAuthenticated()
+        {
+            _log.Info("Become Unauthenticated");
+            Stash.Stash();
+            Receive<BuyGiftCardRequest>(x => Stash.Stash());
+            Receive<NewAuthCookie>(x => HandleNewAuthCookie(x));
         }
 
         #region Init Actor
