@@ -54,9 +54,7 @@ namespace BitGifter.Core.BitWallet
             return res;
         }
     }
-
-
-    //x-api-key – IiHbKeXKLE2vfmQvTHO2Q5Yw63Lj2Qn65eQeYXXc
+  
     public class HttpClientWrapper
     {
         public HttpClient _client { get; set; } = new HttpClient();
