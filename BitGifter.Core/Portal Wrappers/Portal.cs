@@ -46,7 +46,7 @@ namespace BitGifter.Core.Portal_Wrappers
             {
                 var url = driver.Url;
                 GoToGiftCards();
-                return !(driver.Url == "https://www.BitGifter.com/giftcards/?auth=1&se=1");
+                return !(driver.Url == $"{baseURL}/giftcards/?auth=1&se=1");
             }
         }
 
