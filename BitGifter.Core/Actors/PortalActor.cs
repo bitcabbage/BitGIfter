@@ -5,6 +5,7 @@ using BitGifter.Core.BitWallet.Messages;
 using BitGifter.Core.Customers;
 using BitGifter.Core.Gift_Cards;
 using BitGifter.Core.Portal_Wrappers;
+using BitGifter.Core.Sessions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
@@ -37,9 +38,10 @@ namespace BitGifter.Core.Actors
             Value = "065132008093095216224064103177182057142204051159022169008132059008229133025213171183197030249011014208128179180246000109165083041034160064129013086152197010047059165078046136044121060081151036092190165013147121100240190214223034226037169203251248199141254079126079240025247052174031135115228086098199090216147195245142035155017225181248232088237040169183091167164238120108139238240074067131214118096151179205171214163254004245166254053044121123010222168123168109095087033025067105"
         };
 
-        private IWebDriver driver;
+        private IWebDriver _driver;
         private readonly ILoggingAdapter _log = Logging.GetLogger(Context);
         private IActorRef _telegramActor;
+        private SessionsRepository _sessionsRepository = new SessionsRepository();
 
         #endregion
 
@@ -47,8 +49,9 @@ namespace BitGifter.Core.Actors
 
         void HandleNewAuthCookie(NewAuthCookie x)
         {
-            _authCookie.Value = x.Value;
-            _portal.SetAuthCookie(x.Value);
+            SetAuthCookie(x.Value);
+            //_authCookie.Value = x.Value;
+            //_portal.SetAuthCookie(x.Value);
             Become(Authenticated);
         }
 
@@ -79,7 +82,7 @@ namespace BitGifter.Core.Actors
                           var walletService = new FakeWalletService();
 
                           var waletResponse = walletService.CreateWallet(new WalletRequest { customer = new WalletRequest.Customer { id = request.Customer.Id } });
-                          var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new PaymentRequest.Customer { id = request.Customer.Id }, transfer = new PaymentRequest.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });                       
+                          var paymentResult = walletService.MakePayment(new PaymentRequest { customer = new PaymentRequest.Customer { id = request.Customer.Id }, transfer = new PaymentRequest.Transfer { amount = invoice.SatoshiPrice, to = invoice.BitcoinAddress } });
                       })
                       .GetCardCode();
 
@@ -98,7 +101,7 @@ namespace BitGifter.Core.Actors
 
         protected override void PostStop()
         {
-            driver.Dispose();
+            _driver.Dispose();
             base.PostStop();
         }
 
@@ -160,13 +163,20 @@ namespace BitGifter.Core.Actors
         private void Setup()
         {
             //driver = BuildFireFoxDriver();
-            this.driver = BuildChromeDriver();
+            this._driver = BuildChromeDriver();
             // this.portal = new EgifterPortal(driver);
-            this._portal = new FakePortal(driver);
+            this._portal = new FakePortal(_driver);
+            var session = _sessionsRepository.GetSession();
             _portal.NavigateTo();
-            _portal.SetAuthCookie(_authCookie.Value);
+            SetAuthCookie(session);
         }
 
+        private void SetAuthCookie(string value)
+        {
+            _authCookie = new NewAuthCookie { Value = value };
+            _portal.SetAuthCookie(_authCookie.Value);
+            _sessionsRepository.SetSession(value);
+        }
         #endregion
 
     }
